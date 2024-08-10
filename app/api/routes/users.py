@@ -11,6 +11,12 @@ from app.models.util import Message
 router = APIRouter()
 
 
+@router.get("/", response_model=list[UserPublic])
+def get_users(session: SessionDep):
+    users: list[User] = user_service.get_users(session=session)
+    return users
+
+
 @router.get("/{email}", response_model=UserPublic)
 def get_user_by_email(email: str, session: SessionDep):
     user: Optional[User] = user_service.get_user_by_email(session=session, email=email)

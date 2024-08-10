@@ -4,6 +4,11 @@ from sqlmodel import Session, select
 from app.models.user import UserCreate, User, UserUpdate
 
 
+def get_users(session: Session) -> list[User]:
+    results = session.exec(select(User)).all()
+    return results
+
+
 def get_user_by_email(session: Session, email: str) -> Optional[User]:
     user = select(User).where(User.email == email)
     result_user = session.exec(user).first()
