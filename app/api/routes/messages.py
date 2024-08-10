@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, HTTPException
 
 from app.api.dependencies import SessionDep
+from app.core.exceptions import NotFoundError
 from app.models.message import MessagePublic, MessageCreate
 from app.services.message_service import get_user_messages, create_message
 
@@ -20,6 +21,6 @@ def create_message_for_user(user_id: UUID, message_in: MessageCreate, session: S
     try:
         message = create_message(session=session, user_id=user_id, message_in=message_in)
         return message
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    except NotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 

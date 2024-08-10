@@ -8,6 +8,8 @@ from app.models.user import UserPublic, UserCreate, UserUpdate, User
 from app.services import user_service
 from app.models.util import Message
 
+import app.core.resources as res
+
 router = APIRouter()
 
 
@@ -23,7 +25,7 @@ def get_user_by_email(email: str, session: SessionDep):
     if not user:
         raise HTTPException(
             status_code=404,
-            detail="User not found.",
+            detail=res.USER_NOT_FOUND,
         )
     return user
 
@@ -34,7 +36,7 @@ def create_user(user_in: UserCreate, session: SessionDep):
     if user:
         raise HTTPException(
             status_code=400,
-            detail="The user with this email already exists.",
+            detail=res.EMAIL_ALREADY_EXISTS,
         )
 
     user_created: User = user_service.create_user(session=session, user_create=user_in)
@@ -47,7 +49,7 @@ def update_user(session: SessionDep, user_id: uuid.UUID, user_in: UserUpdate):
     if not user:
         raise HTTPException(
             status_code=404,
-            detail="User not found.",
+            detail=res.USER_NOT_FOUND,
         )
 
     if user_in.email:
@@ -55,7 +57,7 @@ def update_user(session: SessionDep, user_id: uuid.UUID, user_in: UserUpdate):
         if user_by_email and user_by_email.id != user_id:
             raise HTTPException(
                 status_code=400,
-                detail="The user with this email already exists.",
+                detail=res.EMAIL_ALREADY_EXISTS,
             )
 
     user_updated: User = user_service.update_user(session=session, user=user, user_update=user_in)
@@ -68,7 +70,7 @@ def delete_user(user_id: uuid.UUID, session: SessionDep):
     if not user:
         raise HTTPException(
             status_code=404,
-            detail="User not found.",
+            detail=res.USER_NOT_FOUND,
         )
     user_service.delete_user(session=session, user=user)
     return Message(message="User deleted successfully.")
