@@ -8,12 +8,12 @@ services:
     environment:
       DATABASE_URL: sqlite:///./app.db
     volumes:
-      - .:/app
+      - ./app:/code/app
 
   test:
     build:
       context: .
       dockerfile: Dockerfile.test
     volumes:
-      - .:/app
+      - ./app:/code/app
     entrypoint: ["pytest"]

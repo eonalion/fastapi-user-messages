@@ -18,8 +18,8 @@ class UserCreate(UserBase):
 
 
 class UserUpdate(UserBase):
-    email: Optional[EmailStr] = Field(default=None, max_length=255)
     name: Optional[str] = Field(default=None, max_length=255)
+    email: Optional[EmailStr] = Field(default=None, max_length=255)
 
 
 class UserPublic(UserBase):
