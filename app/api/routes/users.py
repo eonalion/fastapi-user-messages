@@ -1,14 +1,11 @@
 import uuid
-from typing import Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
 from app.api.dependencies import SessionDep
 from app.models.user import UserPublic, UserCreate, UserUpdate, User
 from app.services import user_service
-from app.models.util import Message
-
-import app.core.resources as res
+from app.models.util import ResponseMessage
 
 router = APIRouter()
 
@@ -21,56 +18,23 @@ def get_users(session: SessionDep):
 
 @router.get("/{email}", response_model=UserPublic)
 def get_user_by_email(email: str, session: SessionDep):
-    user: Optional[User] = user_service.get_user_by_email(session=session, email=email)
-    if not user:
-        raise HTTPException(
-            status_code=404,
-            detail=res.USER_NOT_FOUND,
-        )
+    user = user_service.get_user_by_email(session=session, email=email)
     return user
 
 
 @router.post("/", response_model=UserPublic)
 def create_user(user_in: UserCreate, session: SessionDep):
-    user: Optional[User] = user_service.get_user_by_email(session=session, email=user_in.email)
-    if user:
-        raise HTTPException(
-            status_code=400,
-            detail=res.EMAIL_ALREADY_EXISTS,
-        )
-
     user_created: User = user_service.create_user(session=session, user_create=user_in)
     return user_created
 
 
 @router.patch("/{user_id}", response_model=UserPublic)
 def update_user(session: SessionDep, user_id: uuid.UUID, user_in: UserUpdate):
-    user: Optional[User] = user_service.get_user_by_id(session=session, user_id=user_id)
-    if not user:
-        raise HTTPException(
-            status_code=404,
-            detail=res.USER_NOT_FOUND,
-        )
-
-    if user_in.email:
-        user_by_email: Optional[User] = user_service.get_user_by_email(session=session, email=user_in.email)
-        if user_by_email and user_by_email.id != user_id:
-            raise HTTPException(
-                status_code=400,
-                detail=res.EMAIL_ALREADY_EXISTS,
-            )
-
-    user_updated: User = user_service.update_user(session=session, user=user, user_update=user_in)
+    user_updated: User = user_service.update_user(session=session, user_id=user_id, user_update=user_in)
     return user_updated
 
 
 @router.delete("/{user_id}")
 def delete_user(user_id: uuid.UUID, session: SessionDep):
-    user: Optional[User] = user_service.get_user_by_id(session=session, user_id=user_id)
-    if not user:
-        raise HTTPException(
-            status_code=404,
-            detail=res.USER_NOT_FOUND,
-        )
-    user_service.delete_user(session=session, user=user)
-    return Message(message="User deleted successfully.")
+    user_service.delete_user(session=session, user_id=user_id)
+    return ResponseMessage(message="User deleted successfully.")
