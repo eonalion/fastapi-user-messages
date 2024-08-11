@@ -3,9 +3,16 @@ FROM python:3.9-slim
 WORKDIR /code
 
 COPY requirements.txt .
+COPY scripts/format_check.sh .
+COPY scripts/lint.sh .
+
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 COPY app /code/app
+
+# Run Black, Ruff, and MyPy during the build
+RUN bash format_check.sh
+RUN bash lint.sh
 
 EXPOSE 8000
 
