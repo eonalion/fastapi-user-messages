@@ -33,25 +33,25 @@ def get_user_by_id(session: Session, user_id: uuid.UUID) -> User:
     return user
 
 
-def create_user(session: Session, user_create: UserCreate) -> User:
-    user = _get_user_by_email(session=session, email=user_create.email)
+def create_user(session: Session, user_in: UserCreate) -> User:
+    user = _get_user_by_email(session=session, email=user_in.email)
     if user:
         raise AlreadyExistsError(message=res.EMAIL_ALREADY_EXISTS)
-    user = User.model_validate(user_create)
+    user = User.model_validate(user_in)
     session.add(user)
     session.commit()
     session.refresh(user)
     return user
 
 
-def update_user(session: Session, user_id: uuid.UUID, user_update: UserUpdate) -> User:
+def update_user(session: Session, user_id: uuid.UUID, user_in: UserUpdate) -> User:
     user = get_user_by_id(session=session, user_id=user_id)
-    if user_update.email:
-        user_by_email = _get_user_by_email(session=session, email=user_update.email)
+    if user_in.email:
+        user_by_email = _get_user_by_email(session=session, email=user_in.email)
         if user_by_email and user_by_email.id != user_id:
             raise AlreadyExistsError(message=res.EMAIL_ALREADY_EXISTS)
 
-    user_update_data: dict = user_update.model_dump(exclude_unset=True)
+    user_update_data: dict = user_in.model_dump(exclude_unset=True)
     if user_update_data:
         user.sqlmodel_update(user_update_data)
         session.add(user)
