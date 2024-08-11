@@ -18,14 +18,20 @@ def get_user_messages(session: Session, user_id: UUID) -> list[Message]:
 
 def get_message_for_user(session: Session, user_id: UUID, message_id: UUID) -> Message:
     user = user_service.get_user_by_id(session=session, user_id=user_id)
-    query = select(Message).where(Message.sender_id == user.id).where(Message.id == message_id)
+    query = (
+        select(Message)
+        .where(Message.sender_id == user.id)
+        .where(Message.id == message_id)
+    )
     message = session.exec(query).first()
     if not message:
         raise NotFoundError(message=res.MESSAGE_NOT_FOUND)
     return message
 
 
-def create_message_for_user(session: Session, user_id: UUID, message_in: MessageCreate) -> Message:
+def create_message_for_user(
+    session: Session, user_id: UUID, message_in: MessageCreate
+) -> Message:
     user = user_service.get_user_by_id(session=session, user_id=user_id)
     message = Message(**message_in.dict(), sender_id=user.id)
     session.add(message)
@@ -35,6 +41,8 @@ def create_message_for_user(session: Session, user_id: UUID, message_in: Message
 
 
 def delete_message_for_user(session: Session, user_id: UUID, message_id: UUID) -> None:
-    message = get_message_for_user(session=session, user_id=user_id, message_id=message_id)
+    message = get_message_for_user(
+        session=session, user_id=user_id, message_id=message_id
+    )
     session.delete(message)
     session.commit()

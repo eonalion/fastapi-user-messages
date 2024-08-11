@@ -30,7 +30,9 @@ def create_user(user_in: UserCreate, session: SessionDep):
 
 @router.patch("/{user_id}", response_model=UserPublic)
 def update_user(session: SessionDep, user_id: uuid.UUID, user_in: UserUpdate):
-    user_updated: User = user_service.update_user(session=session, user_id=user_id, user_update=user_in)
+    user_updated: User = user_service.update_user(
+        session=session, user_id=user_id, user_update=user_in
+    )
     return user_updated
 
 

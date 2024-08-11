@@ -8,7 +8,9 @@ app = FastAPI()
 setup_exception_handlers(app)
 
 app.include_router(router=users.router, prefix="/users", tags=["users"])
-app.include_router(router=messages.router, prefix="/users/{user_id}/messages", tags=["messages"])
+app.include_router(
+    router=messages.router, prefix="/users/{user_id}/messages", tags=["messages"]
+)
 
 
 @app.on_event("startup")

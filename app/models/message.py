@@ -26,4 +26,4 @@ class Message(MessageBase, table=True):
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
     sender_id: uuid.UUID = Field(foreign_key="user.id")
-    sender: "User" = Relationship(back_populates="messages")
+    sender: "User" = Relationship(back_populates="messages")  # noqa: F821

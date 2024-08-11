@@ -29,4 +29,6 @@ class UserPublic(UserBase):
 # Database models
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    messages: list["Message"] = Relationship(back_populates="sender", cascade_delete=True)
+    messages: list["Message"] = Relationship(  # noqa: F821
+        back_populates="sender", cascade_delete=True
+    )

@@ -17,12 +17,18 @@ def list_user_messages(user_id: UUID, session: SessionDep):
 
 
 @router.post("/", response_model=MessagePublic)
-def create_message_for_user(user_id: UUID, message_in: MessageCreate, session: SessionDep):
-    message = message_service.create_message_for_user(session=session, user_id=user_id, message_in=message_in)
+def create_message_for_user(
+    user_id: UUID, message_in: MessageCreate, session: SessionDep
+):
+    message = message_service.create_message_for_user(
+        session=session, user_id=user_id, message_in=message_in
+    )
     return message
 
 
 @router.delete("/{message_id}", response_model=ResponseMessage)
 def delete_message_for_user(user_id: UUID, message_id: UUID, session: SessionDep):
-    message_service.delete_message_for_user(session=session, user_id=user_id, message_id=message_id)
+    message_service.delete_message_for_user(
+        session=session, user_id=user_id, message_id=message_id
+    )
     return ResponseMessage(message="Message deleted successfully.")
