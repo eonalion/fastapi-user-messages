@@ -9,11 +9,3 @@ services:
       DATABASE_URL: sqlite:///./app.db
     volumes:
       - ./app:/code/app
-
-  test:
-    build:
-      context: .
-      dockerfile: Dockerfile.test
-    volumes:
-      - ./app:/code/app
-    entrypoint: ["pytest"]

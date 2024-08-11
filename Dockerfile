@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 COPY app /code/app
 
-# Run Black, Ruff, and MyPy during the build
+# Run Black, Ruff and pytest during the build
 RUN bash format_check.sh
 RUN bash lint.sh
 RUN bash test.sh
