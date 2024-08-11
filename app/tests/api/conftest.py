@@ -3,14 +3,15 @@ from fastapi.testclient import TestClient
 
 from app.api.dependencies import get_session
 from app.main import app
+from unittest.mock import Mock
 
 
-@pytest.fixture
-def mock_session(mocker):
-    return mocker.Mock()
+@pytest.fixture(scope="module")
+def mock_session():
+    return Mock()
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def test_client(mock_session):
     def get_session_override():
         return mock_session
