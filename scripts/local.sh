@@ -3,6 +3,7 @@
 # Default flag values
 clean=false
 lint=false
+test=false
 run=false
 
 print_help() {
@@ -11,6 +12,7 @@ print_help() {
     echo "Options:"
     echo "  -c, clean    Remove the existing virtual environment."
     echo "  -l, lint     Run linting and formatting on the application code."
+    echo "  -t, test     Run pytest on the application code."
     echo "  -r, run      Run the application with the existing or newly created environment."
     echo "  -h, help     Display this help message."
     echo
@@ -25,6 +27,9 @@ for arg in "$@"; do
             ;;
         -l|lint)
             lint=true
+            ;;
+        -t|test)
+            test=true
             ;;
         -r|run)
             run=true
@@ -76,6 +81,12 @@ lint_and_format() {
     ./scripts/lint.sh
 }
 
+run_unit_tests() {
+    echo "Running unit tests..."
+    rm -rf .pytest_cache
+    ./scripts/test.sh
+}
+
 run_application() {
     echo "Running the application..."
     uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir app
@@ -89,6 +100,11 @@ fi
 if [ "$lint" = true ]; then
     setup_environment
     lint_and_format
+fi
+
+if [ "$test" = true ]; then
+    setup_environment
+    run_unit_tests
 fi
 
 if [ "$run" = true ]; then

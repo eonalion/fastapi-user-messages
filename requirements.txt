@@ -4,3 +4,7 @@ sqlmodel
 pydantic[email]
 black
 ruff
+pytest
+pytest-mock
+pytest-cov
+httpx

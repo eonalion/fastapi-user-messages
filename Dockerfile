@@ -5,6 +5,10 @@ WORKDIR /code
 COPY requirements.txt .
 COPY scripts/format_check.sh .
 COPY scripts/lint.sh .
+COPY scripts/test.sh .
+COPY pytest.ini .
+COPY .coveragerc .
+
 
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
@@ -13,6 +17,7 @@ COPY app /code/app
 # Run Black, Ruff, and MyPy during the build
 RUN bash format_check.sh
 RUN bash lint.sh
+RUN bash test.sh
 
 EXPOSE 8000
 

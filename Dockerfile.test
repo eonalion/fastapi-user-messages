@@ -5,8 +5,6 @@ WORKDIR /app
 COPY . /app
 
 RUN pip install -r requirements.txt
-# Additionally install pytest dependency
-RUN pip install pytest
 
 # Set the entrypoint to run tests using pytest
 CMD ["pytest"]
