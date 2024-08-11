@@ -1,16 +1,23 @@
-# This is a sample Python script.
+from fastapi import FastAPI
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+from app.api.routes import users, messages
+from app.core.exception_handlers import setup_exception_handlers
+from app.database import init_db
+
+app = FastAPI()
+setup_exception_handlers(app)
+
+app.include_router(router=users.router, prefix="/users", tags=["users"])
+app.include_router(
+    router=messages.router, prefix="/users/{user_id}/messages", tags=["messages"]
+)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+@app.on_event("startup")
+def on_startup():
+    init_db()
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
