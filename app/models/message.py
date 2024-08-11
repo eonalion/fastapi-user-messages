@@ -17,6 +17,7 @@ class MessageCreate(MessageBase):
 
 class MessagePublic(MessageBase):
     id: uuid.UUID
+    sender_id: uuid.UUID
     timestamp: datetime
 
 

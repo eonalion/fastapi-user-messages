@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 @router.get("/", response_model=list[MessagePublic])
-def list_user_messages(user_id: UUID, session: SessionDep):
+def get_user_messages(user_id: UUID, session: SessionDep):
     messages = message_service.get_user_messages(session=session, user_id=user_id)
     return messages
 
