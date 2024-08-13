@@ -51,6 +51,13 @@ clean_environment() {
     else
         echo "No virtual environment found."
     fi
+    echo "Removing cache files..."
+    rm -rf __pycache__/
+    rm -rf .pytest_cache/
+    rm -rf .mypy_cache/
+    rm -rf .ruff_cache/
+    rm -rf .coverage
+    rm -rf htmlcov/
 }
 
 setup_environment() {
