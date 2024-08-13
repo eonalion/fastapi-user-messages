@@ -1,7 +1,8 @@
 from uuid import UUID
 import pytest
 
-from app.core.exceptions import NotFoundError, AlreadyExistsError
+from app.core.constants import DEFAULT_USER_LIMIT
+from app.services.exceptions import NotFoundError, AlreadyExistsError
 from app.models import User
 from app.models.user import UserCreate, UserUpdate
 import app.core.resources as res
@@ -30,7 +31,9 @@ def test_get_users__users_found__users_returned(mocker, test_client, mock_sessio
 
     response = test_client.get(f"{USERS_ROUTE_PATH}/")
 
-    mocked_get_users.assert_called_once_with(session=mock_session)
+    mocked_get_users.assert_called_once_with(
+        limit=DEFAULT_USER_LIMIT, session=mock_session
+    )
     assert response.status_code == 200
     assert response.json() == expected_users
 
@@ -45,7 +48,24 @@ def test_get_users__users_not_found__empty_list_returned(
 
     response = test_client.get(f"{USERS_ROUTE_PATH}/")
 
-    mocked_get_users.assert_called_once_with(session=mock_session)
+    mocked_get_users.assert_called_once_with(
+        limit=DEFAULT_USER_LIMIT, session=mock_session
+    )
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+def test_get_users__users_called_with_custom_limit__limited_users_returned(
+    mocker, test_client, mock_session
+):
+    custom_limit = 1
+    mocked_get_users = mocker.patch(
+        "app.api.routes.users.user_service.get_users", return_value=[]
+    )
+
+    response = test_client.get(f"{USERS_ROUTE_PATH}/?limit={custom_limit}")
+
+    mocked_get_users.assert_called_once_with(limit=custom_limit, session=mock_session)
     assert response.status_code == 200
     assert response.json() == []
 

@@ -1,4 +1,3 @@
-# Shared properties
 import uuid
 from datetime import datetime
 

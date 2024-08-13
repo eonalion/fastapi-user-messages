@@ -2,7 +2,7 @@ from uuid import UUID
 
 from sqlmodel import Session, select
 
-from app.core.exceptions import NotFoundError
+from app.services.exceptions import NotFoundError
 from app.models import Message
 from app.models.message import MessageCreate
 from app.services import user_service

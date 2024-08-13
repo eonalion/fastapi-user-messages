@@ -1,8 +1,9 @@
 import uuid
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
 from app.api.dependencies import SessionDep
+from app.core.constants import DEFAULT_USER_LIMIT, MAXIMUM_USER_LIMIT
 from app.models.user import UserPublic, UserCreate, UserUpdate, User
 from app.services import user_service
 from app.models.util import ResponseMessage
@@ -12,8 +13,11 @@ router = APIRouter()
 
 
 @router.get("/", response_model=list[UserPublic])
-def get_users(session: SessionDep):
-    users: list[User] = user_service.get_users(session=session)
+def get_users(
+    session: SessionDep,
+    limit: int = Query(default=DEFAULT_USER_LIMIT, le=MAXIMUM_USER_LIMIT),
+):
+    users: list[User] = user_service.get_users(session=session, limit=limit)
     return users
 
 

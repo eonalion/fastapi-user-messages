@@ -1,4 +1,4 @@
-from app.core.exceptions import NotFoundError
+from app.services.exceptions import NotFoundError
 from app.models.message import MessageCreate
 from app.models.user import UserCreate
 from app.services.message_service import (

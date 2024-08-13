@@ -2,7 +2,7 @@ from uuid import UUID
 
 import app.core.resources as res
 
-from app.core.exceptions import NotFoundError
+from app.services.exceptions import NotFoundError
 from app.models import Message
 from app.models.message import MessageCreate
 

@@ -2,7 +2,7 @@ from urllib.request import Request
 
 from fastapi.exceptions import RequestValidationError
 from starlette.responses import JSONResponse
-from app.core.exceptions import NotFoundError, AlreadyExistsError
+from app.services.exceptions import NotFoundError, AlreadyExistsError
 
 
 def not_found_exception_handler(request: Request, exc: Exception) -> JSONResponse:

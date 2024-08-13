@@ -1,6 +1,7 @@
 import pytest
 
-from app.core.exceptions import AlreadyExistsError, NotFoundError
+from app.core.constants import DEFAULT_USER_LIMIT
+from app.services.exceptions import AlreadyExistsError, NotFoundError
 from app.models.user import UserCreate, User, UserUpdate
 from app.services.user_service import (
     get_users,
@@ -41,7 +42,7 @@ def test_create_user__user_email_already_exists__already_exists_error_raised(ses
 
 
 def test_get_users__no_users_found__empty_list_returned(session):
-    result = get_users(session=session)
+    result = get_users(limit=DEFAULT_USER_LIMIT, session=session)
     assert result == []
 
 
@@ -55,11 +56,27 @@ def test_get_users__users_found__users_returned(session):
         user_in=UserCreate(email=generate_random_email(), name=generate_random_name()),
     )
 
-    result_users = get_users(session=session)
+    result_users = get_users(limit=DEFAULT_USER_LIMIT, session=session)
 
     assert len(result_users) == 2
     assert user1 in result_users
     assert user2 in result_users
+
+
+def test_get_users__users_found__limited_users_returned(session):
+    limit = 1
+    create_user(
+        session=session,
+        user_in=UserCreate(email=generate_random_email(), name=generate_random_name()),
+    )
+    create_user(
+        session=session,
+        user_in=UserCreate(email=generate_random_email(), name=generate_random_name()),
+    )
+
+    result_users = get_users(limit=limit, session=session)
+
+    assert len(result_users) == 1
 
 
 def test_get_user_by_email__user_found__user_returned(session):

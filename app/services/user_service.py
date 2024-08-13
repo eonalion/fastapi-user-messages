@@ -3,13 +3,13 @@ from typing import Optional
 
 from sqlmodel import Session, select
 
-from app.core.exceptions import NotFoundError, AlreadyExistsError
+from app.services.exceptions import NotFoundError, AlreadyExistsError
 from app.models.user import UserCreate, User, UserUpdate
 import app.core.resources as res
 
 
-def get_users(session: Session) -> list[User]:
-    results = session.exec(select(User)).all()
+def get_users(session: Session, limit: int) -> list[User]:
+    results = session.exec(select(User).limit(limit)).all()
     return results
 
 
