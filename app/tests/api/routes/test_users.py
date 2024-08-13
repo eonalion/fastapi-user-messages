@@ -7,7 +7,7 @@ from app.models import User
 from app.models.user import UserCreate, UserUpdate
 import app.core.resources as res
 
-USERS_ROUTE_PATH = "/users"
+USERS_ROUTE_PATH = "/api/users"
 
 
 def test_get_users__users_found__users_returned(mocker, test_client, mock_session):

@@ -7,7 +7,7 @@ from app.models import Message
 from app.models.message import MessageCreate
 
 USER_ID = "b6f37031-672d-4770-b6e8-ca34fad01968"
-MESSAGES_ROUTE_PATH = f"/users/{USER_ID}/messages"
+MESSAGES_ROUTE_PATH = f"/api/users/{USER_ID}/messages"
 
 
 def test_get_user_messages__messages_found__messages_returned(
