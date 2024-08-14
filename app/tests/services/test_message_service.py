@@ -6,6 +6,7 @@ from app.services.message_service import (
     get_user_messages,
     get_message_for_user,
     delete_message_for_user,
+    _get_message,
 )
 from app.services.user_service import create_user
 from app.tests.utils import generate_random_email, generate_random_name, generate_uuid
@@ -121,6 +122,30 @@ def test_get_message_for_user__message_not_found__not_found_error_raised(session
         get_message_for_user(session=session, user_id=user.id, message_id=message_id)
 
     assert err.value.message == res.MESSAGE_NOT_FOUND
+
+
+def test__get_message__message_found__message_returned(session):
+    user = create_user(
+        session=session,
+        user_in=UserCreate(email=generate_random_email(), name=generate_random_name()),
+    )
+    message = create_message_for_user(
+        session=session,
+        user_id=user.id,
+        message_in=MessageCreate(content="Test message"),
+    )
+
+    result_message = _get_message(session=session, message_id=message.id)
+
+    assert result_message == message
+
+
+def test__get_message__message_not_found__none_returned(session):
+    message_id = generate_uuid()
+
+    result_message = _get_message(session=session, message_id=message_id)
+
+    assert result_message is None
 
 
 def test_delete_message_for_user__message_deleted__no_return(session):

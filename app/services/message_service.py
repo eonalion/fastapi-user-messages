@@ -1,3 +1,4 @@
+from typing import Optional
 from uuid import UUID
 
 from sqlmodel import Session, select
@@ -26,6 +27,12 @@ def get_message_for_user(session: Session, user_id: UUID, message_id: UUID) -> M
     message = session.exec(query).first()
     if not message:
         raise NotFoundError(message=res.MESSAGE_NOT_FOUND)
+    return message
+
+
+def _get_message(session: Session, message_id: UUID) -> Optional[Message]:
+    query = select(Message).where(Message.id == message_id)
+    message = session.exec(query).first()
     return message
 
 

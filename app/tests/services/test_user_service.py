@@ -1,6 +1,7 @@
 import pytest
 
 from app.core.constants import DEFAULT_USER_LIMIT
+from app.models.message import MessageCreate
 from app.services.exceptions import AlreadyExistsError, NotFoundError
 from app.models.user import UserCreate, User, UserUpdate
 from app.services.user_service import (
@@ -11,6 +12,10 @@ from app.services.user_service import (
     get_user_by_id,
     update_user,
     delete_user,
+)
+from app.services.message_service import (
+    create_message_for_user,
+    _get_message,
 )
 from app.tests.utils import generate_random_name, generate_random_email, generate_uuid
 import app.core.resources as res
@@ -244,3 +249,26 @@ def test_delete_user__user_not_found__not_found_error_raised(session):
         delete_user(session=session, user_id=user_id)
 
     assert err.value.message == res.USER_NOT_FOUND
+
+
+def test_delete_user__user_deleted__user_messages_deleted(session):
+    """Check cascade delete for user messages"""
+    user = create_user(
+        session=session,
+        user_in=UserCreate(email=generate_random_email(), name=generate_random_name()),
+    )
+
+    message1 = create_message_for_user(
+        session, user_id=user.id, message_in=MessageCreate(content="Test message 1")
+    )
+    message2 = create_message_for_user(
+        session, user_id=user.id, message_in=MessageCreate(content="Test message 2")
+    )
+
+    delete_user(session=session, user_id=user.id)
+
+    result_message1 = _get_message(session=session, message_id=message1.id)
+    result_message2 = _get_message(session=session, message_id=message2.id)
+
+    assert result_message1 is None
+    assert result_message2 is None
