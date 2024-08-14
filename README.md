@@ -2,7 +2,7 @@
 This is a simple FastAPI application that allows user and message management.
 It supports CRUD operations for users and messages and getting messages sent by a specific user.
 
-# Running in Container
+# Running in Docker
 With `docker` installed, run the following commands in the root directory of the project:
 
 ```bash
