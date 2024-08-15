@@ -43,14 +43,14 @@ You can combine multiple commands and run them at once:
 
 # Available Endpoints
 
-- GET    `/api/v1/users/` - *Get users with limit.*
-- POST   `/api/v1/users/` - *Create user.*
-- GET    `/api/v1/users/{email}` - *Get user by email.*
-- PATCH  `/api/v1/users/{user_id}` - *Partially update user.*
-- DELETE `/api/v1/users/{user_id}` - *Delete user (and all related messages).*
-- GET    `/api/v1/users/{user_id}/messages/` - *Get messages sent by a specific user.*
-- POST   `/api/v1/users/{user_id}/messages/{message_id}` - *Update message sent by a specific user.*
-- DELETE `/api/v1/users/{user_id}/messages/{message_id}` - *Delete message sent by a specific user.*
+- GET    `/api/users/` - *Get users with limit.*
+- POST   `/api/users/` - *Create user.*
+- GET    `/api/users/{email}` - *Get user by email.*
+- PATCH  `/api/users/{user_id}` - *Partially update user.*
+- DELETE `/api/users/{user_id}` - *Delete user (and all related messages).*
+- GET    `/api/users/{user_id}/messages/` - *Get messages sent by a specific user.*
+- POST   `/api/users/{user_id}/messages/{message_id}` - *Update message sent by a specific user.*
+- DELETE `/api/users/{user_id}/messages/{message_id}` - *Delete message sent by a specific user.*
 
 # Project structure
 All application logic resides in the `app` directory. The structure of the `app` directory is following:
